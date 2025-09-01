@@ -50,6 +50,8 @@ for i in {1..30}; do\n\
     sleep 2\n\
 done\n\
 \n\
+# Additional wait to ensure backend is fully initialized\n\
+sleep 3\n\
 echo "Starting frontend..."\n\
 cd /app/frontend && streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0 --server.headless true\n\
 ' > /app/start.sh && chmod +x /app/start.sh

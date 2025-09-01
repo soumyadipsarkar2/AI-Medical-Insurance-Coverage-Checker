@@ -9,7 +9,9 @@ import json
 load_dotenv()
 
 # Configuration
-BASE_URL = os.getenv("BASE_URL", "http://localhost:8001")
+# For local Docker Compose: use port 8001, for Render: use port 8000
+DEFAULT_BASE_URL = "http://localhost:8001" if os.getenv("RENDER") != "true" else "http://localhost:8000"
+BASE_URL = os.getenv("BASE_URL", DEFAULT_BASE_URL)
 
 # Page configuration
 st.set_page_config(

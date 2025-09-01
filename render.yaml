@@ -22,6 +22,8 @@ services:
           property: connectionString
       - key: BASE_URL
         value: http://localhost:8000
+      - key: RENDER
+        value: true
       - key: TESSERACT_CMD
         value: /usr/bin/tesseract
 
