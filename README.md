@@ -190,28 +190,48 @@ CREATE TABLE queries (
 
 ### Render Deployment
 
-1. **Fork this repository** to your GitHub account
-2. **Sign up for Render** at https://render.com
-3. **Create a new Web Service**
-4. **Connect your GitHub repository**
-5. **Configure the service:**
+The repository includes a `render.yaml` file for automated deployment. Here's how to deploy:
+
+#### Option 1: Blueprint Deployment (Recommended)
+
+1. **Sign up for Render** at https://render.com
+2. **Click "New +"** and select **"Blueprint"**
+3. **Connect your GitHub repository**
+4. **Render will automatically**:
+   - Create the web service
+   - Create the PostgreSQL database
+   - Link them together
+   - Set up the infrastructure
+
+5. **Add your API keys** in the Environment section:
+   - `OPENAI_API_KEY`: Your OpenAI API key
+   - `PINECONE_API_KEY`: Your Pinecone API key
+
+6. **Deploy!** Your app will be available at: `https://ai-medical-insurance-checker.onrender.com`
+
+#### Option 2: Manual Deployment
+
+1. **Sign up for Render** at https://render.com
+2. **Create a new Web Service**
+3. **Connect your GitHub repository**
+4. **Configure the service:**
    - **Name**: `ai-medical-insurance-checker`
    - **Environment**: `Docker`
    - **Branch**: `main`
-   - **Root Directory**: `.`
-   - **Build Command**: `docker compose build`
-   - **Start Command**: `docker compose up`
+   - **Build Command**: `docker build -t ai-medical-insurance-checker .`
+   - **Start Command**: `docker run -p 10000:8501 ai-medical-insurance-checker`
+
+5. **Create PostgreSQL Database**:
+   - Go back to dashboard and create a new PostgreSQL service
+   - Name: `ai-medical-insurance-db`
+   - Plan: `Starter`
 
 6. **Add Environment Variables:**
    - `OPENAI_API_KEY`: Your OpenAI API key
    - `PINECONE_API_KEY`: Your Pinecone API key
-   - `PINECONE_ENVIRONMENT`: Your Pinecone environment (e.g., `us-east-1-aws`)
-   - `PINECONE_INDEX_NAME`: Your Pinecone index name (e.g., `docsage-lite`)
-   - `DATABASE_URL`: Render will provide this automatically
+   - `DATABASE_URL`: Copy from PostgreSQL service
 
-7. **Deploy!** Render will build and deploy your application
-
-### Environment Variables for Production
+### Environment Variables
 
 ```env
 OPENAI_API_KEY=sk-your-openai-api-key
