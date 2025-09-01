@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
     gcc \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements files
@@ -35,7 +36,20 @@ RUN echo '#!/bin/bash\n\
 echo "Starting AI Medical Insurance Coverage Checker..."\n\
 echo "Starting backend..."\n\
 cd /app/backend && python -m uvicorn app:app --host 0.0.0.0 --port 8000 &\n\
-sleep 5\n\
+BACKEND_PID=$!\n\
+echo "Backend started with PID: $BACKEND_PID"\n\
+\n\
+# Wait for backend to be ready\n\
+echo "Waiting for backend to be ready..."\n\
+for i in {1..30}; do\n\
+    if curl -s http://localhost:8000/health > /dev/null; then\n\
+        echo "Backend is ready!"\n\
+        break\n\
+    fi\n\
+    echo "Waiting for backend... (attempt $i/30)"\n\
+    sleep 2\n\
+done\n\
+\n\
 echo "Starting frontend..."\n\
 cd /app/frontend && streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0 --server.headless true\n\
 ' > /app/start.sh && chmod +x /app/start.sh
