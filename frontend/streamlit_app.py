@@ -26,19 +26,33 @@ st.markdown("Upload your insurance policy PDF and ask questions about coverage, 
 
 # Check backend status
 backend_status = "unknown"
-try:
-    response = requests.get(f"{BASE_URL}/health", timeout=5)
-    if response.status_code == 200:
-        st.success("✅ Backend is connected and ready")
-        backend_status = "connected"
-    else:
-        st.warning("⚠️ Backend is responding but may have issues")
-        backend_status = "warning"
-except Exception as e:
-    st.error(f"❌ Cannot connect to backend: {str(e)}")
-    st.info(f"Backend URL: {BASE_URL}")
-    st.info("🔄 The backend may still be starting up. Please wait a moment and refresh the page.")
-    backend_status = "error"
+max_retries = 3
+retry_delay = 2
+
+for attempt in range(max_retries):
+    try:
+        response = requests.get(f"{BASE_URL}/health", timeout=10)
+        if response.status_code == 200:
+            st.success("✅ Backend is connected and ready")
+            backend_status = "connected"
+            break
+        else:
+            st.warning("⚠️ Backend is responding but may have issues")
+            backend_status = "warning"
+            break
+    except requests.exceptions.ConnectionError as e:
+        if attempt < max_retries - 1:
+            st.warning(f"⚠️ Backend not ready (attempt {attempt + 1}/{max_retries}). Retrying in {retry_delay} seconds...")
+            time.sleep(retry_delay)
+        else:
+            st.error(f"❌ Cannot connect to backend after {max_retries} attempts: {str(e)}")
+            st.info(f"Backend URL: {BASE_URL}")
+            st.info("🔄 The backend may still be starting up. Please wait a moment and refresh the page.")
+            backend_status = "error"
+    except Exception as e:
+        st.error(f"❌ Error connecting to backend: {str(e)}")
+        backend_status = "error"
+        break
 
 # Initialize session state
 if 'uploaded_file' not in st.session_state:
