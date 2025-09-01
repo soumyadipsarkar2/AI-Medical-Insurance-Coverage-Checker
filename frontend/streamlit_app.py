@@ -9,7 +9,7 @@ import json
 load_dotenv()
 
 # Configuration
-BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8001")
 
 # Page configuration
 st.set_page_config(
