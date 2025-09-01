@@ -1,0 +1,60 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16
+    container_name: docsage-db
+    environment:
+      POSTGRES_DB: docsage
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d docsage"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - docsage-network
+
+  # FastAPI Backend
+  backend:
+    build: ./backend
+    container_name: docsage-backend
+    ports:
+      - "8001:8000"
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/docsage
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    # Health check removed for now - backend is working
+    networks:
+      - docsage-network
+    restart: unless-stopped
+
+  # Streamlit Frontend
+  frontend:
+    build: ./frontend
+    container_name: docsage-frontend
+    ports:
+      - "8502:8501"
+    environment:
+      - BASE_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - docsage-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  docsage-network:
+    driver: bridge
