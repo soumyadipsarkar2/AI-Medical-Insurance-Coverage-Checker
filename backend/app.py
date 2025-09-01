@@ -10,6 +10,7 @@ import io
 
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import openai
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -35,6 +36,15 @@ print(f"Using Pinecone environment: {PINECONE_ENV}")
 
 # Initialize FastAPI app
 app = FastAPI(title="AI Medical Insurance Coverage Checker")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, you should specify the exact frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Database setup
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
@@ -66,6 +76,10 @@ class Query(Base):
 
 # Create tables
 Base.metadata.create_all(bind=engine)
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "message": "Backend is running"}
 
 # OpenAI setup
 openai.api_key = os.getenv("OPENAI_API_KEY")

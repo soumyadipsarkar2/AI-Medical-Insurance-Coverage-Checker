@@ -8,7 +8,7 @@ import json
 load_dotenv()
 
 # Configuration
-BASE_URL = os.getenv("BASE_URL", "http://backend:8000")
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 # Page configuration
 st.set_page_config(
@@ -20,6 +20,17 @@ st.set_page_config(
 # Title and description
 st.title("🏥 AI Medical Insurance Coverage Checker")
 st.markdown("Upload your insurance policy PDF and ask questions about coverage, copays, and benefits.")
+
+# Check backend status
+try:
+    response = requests.get(f"{BASE_URL}/health", timeout=5)
+    if response.status_code == 200:
+        st.success("✅ Backend is connected and ready")
+    else:
+        st.warning("⚠️ Backend is responding but may have issues")
+except Exception as e:
+    st.error(f"❌ Cannot connect to backend: {str(e)}")
+    st.info(f"Backend URL: {BASE_URL}")
 
 # Initialize session state
 if 'uploaded_file' not in st.session_state:
