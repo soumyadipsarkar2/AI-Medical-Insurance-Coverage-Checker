@@ -49,6 +49,18 @@ cd ai-medical-insurance-coverage-checker
 
 ### 2. Set up Environment Variables
 
+#### Option A: Use the Setup Script (Recommended)
+
+```bash
+# Run the automated setup script
+./setup.sh
+
+# Then edit the .env file with your actual API keys
+nano backend/.env
+```
+
+#### Option B: Manual Setup
+
 ```bash
 # Copy and edit the environment file
 cp backend/env.example backend/.env
