@@ -5,8 +5,8 @@ services:
     plan: starter
     region: oregon
     branch: main
-    buildCommand: docker compose build
-    startCommand: docker compose up
+    buildCommand: docker build -t ai-medical-insurance-checker .
+    startCommand: docker run -p 10000:8501 ai-medical-insurance-checker
     envVars:
       - key: OPENAI_API_KEY
         sync: false
@@ -20,6 +20,8 @@ services:
         fromDatabase:
           name: ai-medical-insurance-db
           property: connectionString
+      - key: BASE_URL
+        value: http://localhost:8000
 
 databases:
   - name: ai-medical-insurance-db
