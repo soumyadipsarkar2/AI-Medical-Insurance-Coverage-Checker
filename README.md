@@ -1,14 +1,20 @@
 # 🏥 AI Medical Insurance Coverage Checker
 
-A minimal, dockerized MVP that provides a RAG + OCR pipeline for insurance policy PDFs. Upload your insurance documents and ask questions about coverage, copays, and benefits.
+An intelligent AI-powered application that helps users understand their medical insurance policies by uploading PDF documents and asking questions about coverage, copays, and benefits.
 
-## 🚀 Features
+## 🚀 Live Demo
 
-- **PDF Processing**: Fast text extraction with PyMuPDF + Tesseract OCR fallback
-- **RAG Pipeline**: LangChain + Pinecone + OpenAI for intelligent document querying
-- **Clean UI**: Streamlit interface for easy document upload and question asking
-- **Database Storage**: PostgreSQL for document and query history
-- **Dockerized**: Everything runs with Docker Compose
+[Deploy on Render](#deployment) - Coming Soon!
+
+## ✨ Features
+
+- **📄 PDF Processing**: Fast text extraction with PyMuPDF + Tesseract OCR fallback
+- **🤖 AI-Powered Q&A**: LangChain + OpenAI GPT-4o-mini for intelligent document querying
+- **🔍 Vector Search**: Pinecone vector database for semantic document search
+- **🎨 User-Friendly UI**: Clean Streamlit interface for easy document upload and question asking
+- **💾 Database Storage**: PostgreSQL for document and query history
+- **🐳 Dockerized**: Everything runs with Docker Compose
+- **☁️ Cloud Ready**: Easy deployment to Render, Heroku, or any cloud platform
 
 ## 🏗️ Architecture
 
@@ -26,41 +32,49 @@ A minimal, dockerized MVP that provides a RAG + OCR pipeline for insurance polic
                    └─────────────┘
 ```
 
-## 📋 Prerequisites
+## 🚀 Quick Start
+
+### Prerequisites
 
 - Docker and Docker Compose
 - OpenAI API key
 - Pinecone API key
 
-## 🚀 Quick Start
+### 1. Clone the Repository
 
-### 1. Set up environment variables
+```bash
+git clone https://github.com/yourusername/ai-medical-insurance-coverage-checker.git
+cd ai-medical-insurance-coverage-checker
+```
+
+### 2. Set up Environment Variables
+
 ```bash
 # Copy and edit the environment file
 cp backend/env.example backend/.env
-# Edit backend/.env with your API keys
+
+# Edit backend/.env with your API keys:
+# - OPENAI_API_KEY=sk-your-openai-api-key
+# - PINECONE_API_KEY=pcn-your-pinecone-api-key
+# - PINECONE_ENVIRONMENT=us-east-1-aws
+# - PINECONE_INDEX_NAME=docsage-lite
 ```
 
-### 2. Start the application
+### 3. Start the Application
+
 ```bash
 docker compose up --build
 ```
 
-### 3. Open the app
+### 4. Open the App
+
 - **Frontend**: http://localhost:8502
 - **Backend API**: http://localhost:8001
-
-
-## 📋 Prerequisites
-
-- Docker and Docker Compose
-- OpenAI API key
-- Pinecone API key
 
 ## 📖 Usage
 
 ### 1. Upload Insurance Policy PDF
-- Open http://localhost:8501
+- Open http://localhost:8502
 - Click "Choose a PDF file" and select your insurance policy
 - Click "Process PDF" to extract text and create embeddings
 - View processing stats (pages, chunks, document ID)
@@ -172,6 +186,41 @@ CREATE TABLE queries (
 );
 ```
 
+## 🚀 Deployment
+
+### Render Deployment
+
+1. **Fork this repository** to your GitHub account
+2. **Sign up for Render** at https://render.com
+3. **Create a new Web Service**
+4. **Connect your GitHub repository**
+5. **Configure the service:**
+   - **Name**: `ai-medical-insurance-checker`
+   - **Environment**: `Docker`
+   - **Branch**: `main`
+   - **Root Directory**: `.`
+   - **Build Command**: `docker compose build`
+   - **Start Command**: `docker compose up`
+
+6. **Add Environment Variables:**
+   - `OPENAI_API_KEY`: Your OpenAI API key
+   - `PINECONE_API_KEY`: Your Pinecone API key
+   - `PINECONE_ENVIRONMENT`: Your Pinecone environment (e.g., `us-east-1-aws`)
+   - `PINECONE_INDEX_NAME`: Your Pinecone index name (e.g., `docsage-lite`)
+   - `DATABASE_URL`: Render will provide this automatically
+
+7. **Deploy!** Render will build and deploy your application
+
+### Environment Variables for Production
+
+```env
+OPENAI_API_KEY=sk-your-openai-api-key
+PINECONE_API_KEY=pcn-your-pinecone-api-key
+PINECONE_ENVIRONMENT=us-east-1-aws
+PINECONE_INDEX_NAME=docsage-lite
+DATABASE_URL=postgresql://user:password@host:port/database
+```
+
 ## 🚨 Troubleshooting
 
 ### Common Issues
@@ -228,13 +277,31 @@ docker compose logs db
 
 ## 📝 License
 
-This is a demo project. Please ensure compliance with OpenAI, Pinecone, and other service terms of use.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🤝 Contributing
 
-This is a minimal MVP. For production use, consider:
-- Adding comprehensive error handling
-- Implementing retry mechanisms
-- Adding unit and integration tests
-- Implementing proper logging
-- Adding API documentation with OpenAPI/Swagger
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📞 Support
+
+If you have any questions or need help:
+- Open an issue on GitHub
+- Check the troubleshooting section
+- Review the documentation
+
+## 🙏 Acknowledgments
+
+- [LangChain](https://langchain.com/) for the RAG framework
+- [OpenAI](https://openai.com/) for the AI models
+- [Pinecone](https://pinecone.io/) for vector search
+- [Streamlit](https://streamlit.io/) for the web interface
+- [FastAPI](https://fastapi.tiangolo.com/) for the backend API
+
+---
+
+**Made with ❤️ for better healthcare understanding**

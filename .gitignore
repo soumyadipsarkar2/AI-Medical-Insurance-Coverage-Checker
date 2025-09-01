@@ -1,6 +1,7 @@
 # Environment variables
 .env
 backend/.env
+frontend/.env
 
 # Python
 __pycache__/
@@ -29,6 +30,8 @@ MANIFEST
 venv/
 env/
 ENV/
+env.bak/
+venv.bak/
 
 # IDE
 .vscode/
@@ -46,13 +49,20 @@ ENV/
 ehthumbs.db
 Thumbs.db
 
-# Docker
-.dockerignore
-
 # Logs
 *.log
 logs/
 
+# Docker
+.dockerignore
+
 # Temporary files
 *.tmp
 *.temp
+
+# Pinecone test files
+pinecone_test/
+
+# Test files
+test_policy.txt
+test_pinecone.py
