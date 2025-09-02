@@ -4,6 +4,7 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PORT=8501
 
 # Set work directory
 WORKDIR /app
@@ -57,11 +58,11 @@ done\n\
 # Additional wait to ensure backend is fully initialized\n\
 sleep 5\n\
 echo "Starting frontend..."\n\
-cd /app/frontend && streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0 --server.headless true\n\
+cd /app/frontend && streamlit run streamlit_app.py --server.port ${PORT:-8501} --server.address 0.0.0.0 --server.headless true\n\
 ' > /app/start.sh && chmod +x /app/start.sh
 
 # Expose the frontend port (Render will use this)
-EXPOSE 8501
+EXPOSE ${PORT:-8501}
 
 # Start the application
 CMD ["/app/start.sh"]
